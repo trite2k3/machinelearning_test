@@ -118,7 +118,7 @@ criterion = nn.MSELoss()
 
 # Skapa optimeringsfunktionen (Stochastic Gradient Descent)
 # learning_rate = 0.01
-learning_rate = 0.0005
+learning_rate = 0.0001
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 ### SKAPA FÖRLUST OCH OPTIMERING ###
 
@@ -162,8 +162,17 @@ with torch.no_grad():
 # Har bytt plats på dem för vill ha datum på x-axeln
 plt.plot(y_train, x_train, 'ro', label='Original data')
 plt.plot(predicted, x_train, label='Fitted line')
+
+# print(int(min(y_train)))
+# print(int(max(y_train)))
+# Set the y-axis limit to y_train
+# Det här är bakvänt för jag ville ha datum på x axis xD
+plt.xlim([int(min(y_train)), int(max(y_train))])
+plt.ylim([int(min(x_train)), int(max(x_train))])
+
 plt.legend()
 plt.show()
 ### TESTA MODELLEN ###
+
 
 
