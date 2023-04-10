@@ -7,3 +7,4 @@ matplot
 requests
 html5lib
 bs4
+numpy
