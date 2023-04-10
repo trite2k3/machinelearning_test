@@ -11,6 +11,9 @@ import matplotlib.pyplot as plt
 
 # HTTP Library
 import requests
+
+# Datetime Library
+import time
 ### IMPORT ###
 
 
@@ -22,10 +25,20 @@ def get_stock_data(symbol):
 
     # Skapa URL för att hämta data från Yahoo Finance
     url = 'https://query1.finance.yahoo.com/v7/finance/download/{}'.format(symbol)
+
+    # Ta datum
+    now = int(time.time())
+    # räkna 24 timmar sedan
+    days_ago = 120  # Dagar att gå tillbaka
+
+    seconds_in_day = 24 * 60 * 60  # Sekunder på en dag
+    seconds_ago = days_ago * seconds_in_day  # Sekunder att gå tillbaka
+    start = now - seconds_ago  # Unix timestamp
+
     # Parametrar för requests
     params = {
-        'period1': 1633106400,
-        'period2': 1640959200,
+        'period1': start,
+        'period2': now,
         'interval': '1d',
         'events': 'history',
         'includeAdjustedClose': True,
@@ -87,9 +100,8 @@ y_train = y_train.reshape(-1, 1)
 # "Debug" lol
 print(len(y_train))
 print(y_train)
-print(len(y_train))
+print(len(x_train))
 print(x_train)
-y_train = y_train.reshape(-1, 1)
 ### SKAPA DATASET ###
 
 
@@ -118,7 +130,7 @@ criterion = nn.MSELoss()
 
 # Skapa optimeringsfunktionen (Stochastic Gradient Descent)
 # learning_rate = 0.01
-learning_rate = 0.0001
+learning_rate = 0.001
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 ### SKAPA FÖRLUST OCH OPTIMERING ###
 
@@ -158,10 +170,14 @@ for epoch in range(epochs):
 with torch.no_grad():
     predicted = model(torch.from_numpy(x_train)).detach().numpy()
 
+# Oops...
+print(predicted)
+
 # Visualisera resultaten
 # Har bytt plats på dem för vill ha datum på x-axeln
 plt.plot(y_train, x_train, 'ro', label='Original data')
-plt.plot(predicted, x_train, label='Fitted line')
+#plt.plot(predicted, x_train, label='Fitted line')
+plt.plot(y_train, predicted, label='Fitted line')
 
 # print(int(min(y_train)))
 # print(int(max(y_train)))
